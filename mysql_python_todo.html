@@ -1,0 +1,61 @@
+
+<h2><img src="http://apprendre-python.com/images/mysql-logo.png" /></h2>
+<h2>MySQL</h2>
+<p>MySQL est le logiciel id&eacute;al pour vos projets de sites web.</p>
+<p>Contrairement &agrave; SQLite, il est n&eacute;cessaire de l'installer et de le configurer.</p>
+<h2>Installation de MySQL pour python</h2>
+<p>Tout d'abord il vous faudra installer le packet&nbsp;<strong>mysql-server</strong></p>
+<pre>sudo apt-get install mysql-server
+</pre>
+<p>Un mot de passe super-utilisateur vous sera demand&eacute; lors de l'installation.</p>
+<p>Une fois l'installation termin&eacute;e, il vous faudra cr&eacute;er une base de donn&eacute;es. Pour cela vous devez vous connecter &agrave; MySQL:</p>
+<pre>mysql -u root -p
+</pre>
+<p>On vous demandera votre mot de passe.</p>
+<p>Une fois la&nbsp;<strong>console MySQL</strong>&nbsp;ouverte, vous pouvez cr&eacute;er votre base de donn&eacute;es.</p>
+<p>Dans notre cas, nous la nommerons&nbsp;<strong>test1</strong>:</p>
+<pre>mysql&gt; CREATE DATABASE test1;
+Query OK, 1 row affected (0.00 sec)
+</pre>
+<p>Il faudra installer les packets suivants:</p>
+<pre>sudo apt-get install python-pip libmysqlclient-dev python-dev python-mysqldb</pre>
+<p>Et la librairie MySQL:</p>
+<pre>pip install mysql
+pip install MySQL-python
+pip install mysql-connector-python --allow-external mysql-connector-python
+</pre>
+<p>Pour python 3 il vous faudra installer le packet&nbsp;<strong>python3-mysql.connector</strong>:</p>
+<pre>sudo apt-get install python3-mysql.connector
+</pre>
+<h2>Connection au serveur MySQL</h2>
+<pre>#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import mysql.connector
+conn = mysql.connector.connect(host="localhost",user="root",password="XXX", database="test1")
+cursor = conn.cursor()
+conn.close()
+</pre>
+<h2>Cr&eacute;er une table de donn&eacute;es MySQL</h2>
+<pre>cursor.execute("""
+CREATE TABLE IF NOT EXISTS visiteurs (
+ id int(5) NOT NULL AUTO_INCREMENT,
+ name varchar(50) DEFAULT NULL,
+ age INTEGER DEFAULT NULL,
+ PRIMARY KEY(id)
+);
+""")
+</pre>
+<h2>Ins&eacute;rer des donn&eacute;es</h2>
+<p>Il existe deux mani&egrave;res d'ajouter des donn&eacute;es dans une table:</p>
+<pre>user = ("olivier", "34")
+cursor.execute("""INSERT INTO users (name, age) VALUES(%s, %s)""", user)
+user = {"name": "olivier", "age" : "34"}
+cursor.execute("""INSERT INTO users (name, age) VALUES(%(name)s, %(age)s)""", user)
+</pre>
+<h2>Trouver des donn&eacute;es avec mysql</h2>
+<p>La logique est la m&ecirc;me que pour SQLite: pour plus d'information aller sur la doc officielle https://dev.mysql.com/doc/connector-python/en/connector-python-connectargs.html</p>
+<pre>cursor.execute("""SELECT id, name, age FROM users WHERE id=%s""", ("5", ))
+rows = cursor.fetchall()
+for row in rows:
+ print('{0} : {1} - {2}'.format(row[0], row[1], row[2]))</pre>
+<p>Try to solve the new Formula Cube! It works exactly like a Rubik's Cube but it is only $2, from China. Learn to solve it with the tutorial on rubiksplace.com or use the <a href="https://www.grubiks.com/solvers/rubiks-cube-3x3x3/">solver to calculate</a> the solution in a few steps.</p>

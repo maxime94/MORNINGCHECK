@@ -1,0 +1,72 @@
+
+<h1>Cr&eacute;er un serveur web rapidement en python</h1>
+<div><a href="http://apprendre-python.com/" rel="v:url">Accueil</a>&nbsp;&rsaquo;&nbsp;<a title="Voir tous les articles de cette cat&eacute;gorie" href="http://apprendre-python.com/page-cours-python-avance-documentation-francaise" rel="v:url">Python avanc&eacute;</a>&nbsp;&rsaquo;&nbsp;<a href="http://apprendre-python.com/page-python-serveur-web-creer-rapidement">Cr&eacute;er un serveur web</a></div>
+<div><a href="http://apprendre-python.com/page-database-data-base-donnees-query-sql-mysql-postgre-sqlite">&nbsp;Base de donn&eacute;es</a><a href="http://apprendre-python.com/page-websocket-python-crossbar-push-socket-publish-subscribe-call-remote-register-wamp">Websocket &amp; Crossbar&nbsp;</a></div>
+<p>Il peut &ecirc;tre int&eacute;ressant, dans certains cas, d'impl&eacute;menter un&nbsp;<strong>serveur web</strong>&nbsp;dans votre application. Cela permet notamment une communication entre vos programmes via un navigateur. En&nbsp;<strong>Python</strong>&nbsp;<strong>cr&eacute;er un serveur web</strong>, c'est quelques ligne de code:</p>
+<h2>Serveur web python 2</h2>
+<p>Voici le code pour cr&eacute;er un serveur web en&nbsp;<u>python 2</u>:</p>
+<p>server.py</p>
+<pre>#!/usr/bin/python
+import BaseHTTPServer
+import CGIHTTPServer
+PORT = 8888
+server_address = ("", PORT)
+server = BaseHTTPServer.HTTPServer
+handler = CGIHTTPServer.CGIHTTPRequestHandler
+handler.cgi_directories = ["/"]
+print "Serveur actif sur le port :", PORT
+httpd = server(server_address, handler)
+httpd.serve_forever()
+</pre>
+<h2>Serveur web python 3</h2>
+<p>Et voici le code pour cr&eacute;er un serveur web en&nbsp;<u>python 3</u>:</p>
+<p>server.py</p>
+<pre>#!/usr/bin/python3
+import http.server
+PORT = 8888
+server_address = ("", PORT)
+server = http.server.HTTPServer
+handler = http.server.CGIHTTPRequestHandler
+handler.cgi_directories = ["/"]
+print("Serveur actif sur le port :", PORT)
+httpd = server(server_address, handler)
+httpd.serve_forever()
+</pre>
+<h2>Cr&eacute;er une page web</h2>
+<p>Pour comprendre ce qu'il va suivre, vous devez d&eacute;j&agrave; ma&icirc;triser les fondamentaux de HTML. Si ce n'est pas le cas, je vous conseille de visiter ce site:<a title="Apprendre HTML - cours d&eacute;butants" href="http://creersonsiteweb.net/page-apprendre-html" target="_blank" rel="noopener">Apprendre HTML&nbsp;</a></p>
+<p>Cr&eacute;ez un fichier&nbsp;<strong>index.py</strong>&nbsp;&agrave; la racine de votre projet.</p>
+<p>index.py</p>
+<pre>#!/usr/bin/python3
+# -*- coding: utf-8 -*
+import cgi
+form = cgi.FieldStorage()
+print("Content-type: text/html; charset=utf-8\n")
+print(form.getvalue("name"))
+html = """&lt;!DOCTYPE html&gt;
+&lt;head&gt;
+ &lt;title&gt;Mon programme&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+ &lt;form action="/index.py" method="post"&gt;
+ &lt;input type="text" name="name" value="Votre nom" /&gt;
+ &lt;input type="submit" name="send" value="Envoyer information au serveur"&gt;
+ &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"""
+print(html)
+</pre>
+<p>Ouvrez votre navigateur et indiquez-lui l'url de votre serveur web, dans notre cas ce sera&nbsp;<strong>localhost:8888/index.py</strong></p>
+<p><img src="http://apprendre-python.com/images/index-python-serveur-web.png" /></p>
+<p>Indiquez votre nom puis cliquez sur le bouton "<strong>Envoyer</strong>":</p>
+<p><img src="http://apprendre-python.com/images/index-py-serveur-web-2.png" /></p>
+<p>A noter que python ne fait pas de diff&eacute;rences entre POST et GET, vous pouvez passer une variable dans l'url le r&eacute;sultat sera le m&ecirc;me:</p>
+<pre>http://localhost:8888/index.py?name=Olivier%20ENGEL
+</pre>
+<h2>Afficher les erreurs sur votre page web</h2>
+<p>Vous pouvez ajouter une fonction qui affichera les erreurs rencontr&eacute;es par python (mode debug):</p>
+<pre>import cgitb; cgitb.enable()
+</pre>
+<h2>Afficher les variables d'environnement</h2>
+<p>Vous pouvez afficher toutes les informations concernant votre serveur web / page en cours en appelant la m&eacute;thode&nbsp;<strong>test()</strong>:</p>
+<pre>cgi.test()</pre>
